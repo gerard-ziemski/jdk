@@ -148,7 +148,7 @@ public final class BufferedCodeBuilder
             implements CodeModel {
 
         private Model() {
-            super(elements);
+            super(BufferedCodeBuilder.this.elements);
         }
 
         @Override
@@ -173,12 +173,7 @@ public final class BufferedCodeBuilder
 
         @Override
         public void writeTo(DirectMethodBuilder builder) {
-            builder.withCode(new Consumer<>() {
-                @Override
-                public void accept(CodeBuilder cb) {
-                    forEach(cb);
-                }
-            });
+            builder.withCode(Util.writingAll(this));
         }
 
         @Override

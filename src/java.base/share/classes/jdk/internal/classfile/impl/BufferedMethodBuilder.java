@@ -53,7 +53,6 @@ public final class BufferedMethodBuilder
     private AccessFlags flags;
     private final MethodModel original;
     private int[] parameterSlots;
-    MethodTypeDesc mDesc;
 
     public BufferedMethodBuilder(SplitConstantPool constantPool,
                                  ClassFileImpl context,
@@ -66,7 +65,7 @@ public final class BufferedMethodBuilder
         this.context = context;
         this.name = nameInfo;
         this.desc = typeInfo;
-        this.flags = AccessFlags.ofMethod(flags);
+        this.flags = new AccessFlagsImpl(AccessFlag.Location.METHOD, flags);
         this.original = original;
     }
 
@@ -102,14 +101,7 @@ public final class BufferedMethodBuilder
 
     @Override
     public MethodTypeDesc methodTypeSymbol() {
-        if (mDesc == null) {
-            if (original instanceof MethodInfo mi) {
-                mDesc = mi.methodTypeSymbol();
-            } else {
-                mDesc = MethodTypeDesc.ofDescriptor(methodType().stringValue());
-            }
-        }
-        return mDesc;
+        return Util.methodTypeSymbol(methodType());
     }
 
     @Override
@@ -156,7 +148,7 @@ public final class BufferedMethodBuilder
             extends AbstractUnboundModel<MethodElement>
             implements MethodModel, MethodInfo {
         public Model() {
-            super(elements);
+            super(BufferedMethodBuilder.this.elements);
         }
 
         @Override
@@ -205,12 +197,7 @@ public final class BufferedMethodBuilder
 
         @Override
         public void writeTo(DirectClassBuilder builder) {
-            builder.withMethod(methodName(), methodType(), methodFlags(), new Consumer<>() {
-                @Override
-                public void accept(MethodBuilder mb) {
-                    forEach(mb);
-                }
-            });
+            builder.withMethod(methodName(), methodType(), methodFlags(), Util.writingAll(this));
         }
 
         @Override
