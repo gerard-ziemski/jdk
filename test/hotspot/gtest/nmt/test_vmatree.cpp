@@ -307,23 +307,23 @@ public:
 
   template<int N>
   void print_tree(const ExpectedTree<N>& et, int line_no) {
-//    const State Rs = State::Reserved;
-//    const State Rl = State::Released;
-//    const State C = State::Committed;
-//    stringStream ss;
-//    ss.print_cr("Tree nodes for line %d", line_no);
-//    ss.print_cr("    //            1         2         3         4         5");
-//    ss.print_cr("    //  012345678901234567890123456789012345678901234567890");
-//    ss.print   ("    //  ");
-//    for (int i = 0; i < N; i++) {
-//      char state_char = et.states[i+1] == Rl ? '.' :
-//                        et.states[i+1] == Rs ? 'r' :
-//                        et.states[i+1] ==  C ? 'C' : ' ';
-//      for (int j = et.nodes[i]; i < (N - 1) && j < et.nodes[i + 1]; j++) {
-//        ss.put(state_char);
-//      }
-//    }
-//    tty->print_cr("%s", ss.base());
+    const State Rs = State::Reserved;
+    const State Rl = State::Released;
+    const State C = State::Committed;
+    stringStream ss;
+    ss.print_cr("Tree nodes for line %d", line_no);
+    ss.print_cr("    //            1         2         3         4         5");
+    ss.print_cr("    //  012345678901234567890123456789012345678901234567890");
+    ss.print   ("    //  ");
+    for (int i = 0; i < N; i++) {
+      char state_char = et.states[i+1] == Rl ? '.' :
+                        et.states[i+1] == Rs ? 'r' :
+                        et.states[i+1] ==  C ? 'C' : ' ';
+      for (int j = et.nodes[i]; i < (N - 1) && j < et.nodes[i + 1]; j++) {
+        ss.put(state_char);
+      }
+    }
+    tty->print_cr("%s", ss.base());
   }
 };
 
